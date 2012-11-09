@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+DEF_BASE="$HOME/.aed"
+AED_BASE="${AED_BASE:=$DEF_BASE}"
+AED_LIB="${AED_BASE}/lib"
+AED_MODULES="${AED_BASE}/modules"
+AED_CONFIG="${HOME}/.aedrc"
+
+source "${AED_LIB}/utils.sh" || die "Could not find AED install"
+
+PWD_DIR=`pwd -P`
+AED_LOCAL_DIR="${PWD_DIR}/.aed"
+AED_LOCAL_MODULES="${AED_LOCAL_DIR}/modules"
+
+AED_FILE="${PWD_DIR}/Aedfile"
+if [ ! -e "$AED_FILE" ]; then
+  outp "You must create a project specific '$AED_FILE' file"
+  exit 1
+fi
+
+
+
+echo "                 ______  _____"
+echo "          /\    |  ____||  __ \\"
+echo "         /  \   | |__   | |  | |"
+echo "        / /\ \  |  __|  | |  | |"
+echo "       / ____ \ | |____ | |__| |"
+echo "      /_/    \_\|______||_____/"
+echo
+echo
+echo "          Automated External "
+echo "            Defibrillator "
+echo
+#echo "   ....?ZZZZZZZZ.......ZZZZZZZZ+...     "
+#echo "   ..ZZZZZZZZZZZZZ,.~ZZZZZZZZZZZZZ.     "
+#echo "...ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ?... "
+#echo "..ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ.. "
+#echo ".ZZZZZZZZZZZZZZZZ.   .,ZZZZZZZZZZZZZZI. "
+#echo ".ZZZZZZZZZZZZZZZ?    .ZZZZZZZZZZZZZZZZ. "
+#echo "ZZZZZZZZZZZZZZZZ.. ..ZZZZZZZZZZZZZZZZZO."
+#echo "ZZZZZZZZZZZZZZZZ . .,ZZZZZZZZZZZZZZZZZZ."
+#echo "ZZZZZZZZZZZZZZZ.....ZZZZI$ZZZZZZZZZZZZZ."
+#echo "ZZZZZZZZZZZZZZZ....Z,....ZZZZZZZZZZZZZZ."
+#echo "+ZZZZZZZZZZZZZ,.........ZZZZZZZZZZZZZZ,."
+#echo ".ZZZZZZZZZZZZZ.........OZZZZZZZZZZZZZZ. "
+#echo "..ZZZZZZZZZZZZ..=ZZZ...ZZZZZZZZZZZZZZ.. "
+#echo "...ZZZZZZZZZZZZZZZZZ .ZZZZZZZZZZZZZZ... "
+#echo " ...ZZZZZZZZZZZZZZZ..ZZZZZZZZZZZZZZ.... "
+#echo "   ..ZZZZZZZZZZZZZZ.:ZZZZZZZZZZZZZ.     "
+#echo "   ...ZZZZZZZZZZZZ~.ZZZZZZZZZZZZZ..     "
+#echo "   ....OZZZZZZZZ,Z.ZZZZZZZZZZZZZ...     "
+#echo "       .=ZZZZZZZ.....ZZZZZZZZZ:.        "
+#echo "       ...ZZZZZZ+.,ZZZZZZZZZZ...        "
+#echo "          .=ZZZZZZZZZZZZZZZ:....        "
+#echo "          ...ZZZZZZZZZZZZZ....          "
+#echo "              :ZZZZZZZZZ,...            "
+#echo "              ..OZZZZZZ.....            "
+#echo "                ..ZOZ.. .               "
+#echo "                 ....                   "
+
+source "${AED_LIB}/core.sh"
+source "${AED_LIB}/platform.sh"
+
+outp "Shocking project to life with '${PKG_MGR}' on '${PLATFORM}' ... CLEAR!!!"
+
+outp "Updating ${PKG_MGR}..."
+update_pkg_mgr || die "Cannot to update package manager"
+
+debug "loading ${AED_FILE}"
+source "${AED_FILE}"
+
+outp "It lives!!"
