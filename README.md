@@ -11,7 +11,7 @@ Installation
 
 __NOTE: Much of the installation/update process will be automated in the future.__
 
-1. git clone {repo} ~/.aed
+1. git clone https://github.com/bravenet/ead.git ~/.aed
 2. export PATH=~/.aed/bin:$PATH
 
 You can track upstream changes by using git to pull them down at your leisure.
