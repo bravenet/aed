@@ -102,4 +102,4 @@ See the wiki for advanced usage topics.
 Credits
 -------
 
-Many thanks are due to Brian Stolz with whom I bounced many ideas off of, and who helped conceive of the modules concept and layout.
+Many thanks are due to [Brian Stolz](/tecnobrat) with whom I bounced many ideas off of, and who helped conceive of the modules concept and layout.
