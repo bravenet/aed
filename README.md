@@ -21,17 +21,17 @@ Basic Usage
 
 __NOTE: Much of the manual project configuration will be automated in the future.__
 
-AED looks for an `AEDFile` inside your project. The `AEDFile` describes how to bring life to your project.
+AED looks for an `Aedfile` inside your project. The `Aedfile` describes how to bring life to your project.
 
-A sample AEDFile will look like this
+A sample Aedfile will look like this
 
-    $ cat AEDFile
+    $ cat Aedfile
     # vim: ft=sh
     defib 'mongodb'
     defib 'redis'
     defib 'mysql'
 
-With an AEDFile located in the root of your project you can breath life and bootstrap your project using the `defib` command.
+With an Aedfile located in the root of your project you can breath life and bootstrap your project using the `defib` command.
 
     $ defib
                      ______  _____
