@@ -5,8 +5,7 @@ readonly MODULE_POST_INSTALL_HOOK=module_post_install
 readonly MODULE_PRE_INSTALL_HOOK=module_pre_install
 
 defib() {
-  clear_env
-
+  (
   if has_fun "$1"; then
     if ! eval "$1"; then
       die "Custom hook returned non-zero status"
@@ -18,14 +17,7 @@ defib() {
       shock_package "$1"
     fi
   fi
-}
-
-clear_env() {
-  unset PKG_NAME
-  unset PKG_EXEC
-  unset "$MODULE_PRE_INSTALL_HOOK"
-  unset "$MODULE_INSTALL_HOOK"
-  unset "$MODULE_POST_INSTALL_HOOK"
+  )
 }
 
 connect_module_leads() {
