@@ -12,8 +12,13 @@ debug() {
 
 die() {
   echo
-  __puts '>' "Fatal: $1"
-  outp "Project has flatlined!"
+  if [ -e "$1" ]; then
+    __puts '>' "Fatal: $1"
+  fi
+
+  if [ "$BASH_SUBSHELL" -eq 0 ]; then
+    outp "Project has flatlined!"
+  fi
   exit 1
 }
 

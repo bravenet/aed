@@ -5,6 +5,12 @@ readonly MODULE_POST_INSTALL_HOOK=module_post_install
 readonly MODULE_PRE_INSTALL_HOOK=module_pre_install
 
 defib() {
+  if ! defib_module $1; then
+    die
+  fi
+}
+
+defib_module() {
   (
   if has_fun "$1"; then
     if ! eval "$1"; then
