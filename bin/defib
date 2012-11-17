@@ -1,47 +1,57 @@
 #!/usr/bin/env bash
 
-DEF_BASE="$HOME/.aed"
-AED_BASE="${AED_BASE:=$DEF_BASE}"
-AED_LIB="${AED_BASE}/lib"
-AED_MODULES="${AED_BASE}/modules"
-AED_CONFIG="${HOME}/.aedrc"
+aed_pwd=`pwd -P`
+aed_default_base="${HOME}/.aed"
+aed_local_base="${aed_pwd}/.aed"
+aed_lua_dirs="#/lib/?.lua;#/lib/?/init.lua"
+aed_lua_cdirs="#/lib/?.so;#/lib/?/init.so" # TODO detect windows and use .dll
 
-source "${AED_LIB}/utils.sh" || die "Could not find AED install"
+export AED_BASE="${AED_BASE:=$aed_default_base}"
+export AED_LOCAL="${AED_LOCAL:=$aed_local_base}"
+export LUA_PATH="${aed_lua_dirs//#/$AED_BASE};${aed_lua_dirs//#/$AED_LOCAL}"
+export LUA_CPATH="${aed_lua_cdirs//#/$AED_BASE};${aed_lua_cdirs//#/$AED_LOCAL}"
 
-PWD_DIR=`pwd -P`
-AED_LOCAL_DIR="${PWD_DIR}/.aed"
-AED_LOCAL_MODULES="${AED_LOCAL_DIR}/modules"
+lua -l aed -e "main('${aed_pwd}')"
 
-AED_FILE="${PWD_DIR}/Aedfile"
-if [ ! -e "$AED_FILE" ]; then
-  outp "You must create a project specific '$AED_FILE' file"
-  exit 1
-fi
+#AED_LIB="${AED_BASE}/lib"
+#AED_MODULES="${AED_BASE}/modules"
+
+#AED_CONFIG="${HOME}/.aedrc"
+
+#AED_LOCAL_DIR="${PWD_DIR}/.aed"
+#AED_LOCAL_MODULES="${AED_LOCAL_DIR}/modules"
+#AED_FILE="${PWD_DIR}/Aedfile"
+
+#if [ ! -e "$AED_FILE" ]; then
+  #outp "You must create a project specific '$AED_FILE' file"
+  #exit 1
+#fi
 
 
 
-echo "                 ______  _____"
-echo "          /\    |  ____||  __ \\"
-echo "         /  \   | |__   | |  | |"
-echo "        / /\ \  |  __|  | |  | |"
-echo "       / ____ \ | |____ | |__| |"
-echo "      /_/    \_\|______||_____/"
-echo
-echo
-echo "          Automated External "
-echo "            Defibrillator "
-echo
+#echo "                 ______  _____"
+#echo "          /\    |  ____||  __ \\"
+#echo "         /  \   | |__   | |  | |"
+#echo "        / /\ \  |  __|  | |  | |"
+#echo "       / ____ \ | |____ | |__| |"
+#echo "      /_/    \_\|______||_____/"
+#echo
+#echo
+#echo "          Automated External "
+#echo "            Defibrillator "
+#echo
 
-debug "Sourcing core and platform from '${AED_LIB}'"
-source "${AED_LIB}/core.sh"
-source "${AED_LIB}/platform.sh"
+#source "${AED_LIB}/utils.sh" || die "Could not find AED install"
+#debug "Sourcing core and platform from '${AED_LIB}'"
+#source "${AED_LIB}/core.sh"
+#source "${AED_LIB}/platform.sh"
 
-outp "Shocking project to life with '${PKG_MGR}' on '${PLATFORM}' ... CLEAR!!!"
+#outp "Shocking project to life with '${PKG_MGR}' on '${PLATFORM}' ... CLEAR!!!"
 
-outp "Updating ${PKG_MGR}..."
-update_pkg_mgr || die "Cannot to update package manager"
+#outp "Updating ${PKG_MGR}..."
+#update_pkg_mgr || die "Cannot to update package manager"
 
-debug "loading ${AED_FILE}"
-source "${AED_FILE}"
+#debug "loading ${AED_FILE}"
+#source "${AED_FILE}"
 
-outp "It lives!!"
+#outp "It lives!!"
