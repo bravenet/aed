@@ -2,7 +2,13 @@ PKG_MGR_DESC="The missing package manager for OS X."
 PKG_MGR_EXEC="brew"
 
 pkg_mgr_install() {
+  debug "Running '$PKG_MGR_EXEC install $1'"
   ${PKG_MGR_EXEC} install $1
+}
+
+pkg_mgr_check() {
+  debug "Running '$PKG_MGR_EXEC list $1'"
+  ${PKG_MGR_EXEC} list ${1}
 }
 
 has_pkg_mgr() {

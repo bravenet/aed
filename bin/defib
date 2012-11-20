@@ -6,19 +6,14 @@ AED_LIB="${AED_BASE}/lib"
 AED_MODULES="${AED_BASE}/modules"
 AED_CONFIG="${HOME}/.aedrc"
 
-source "${AED_LIB}/utils.sh" || die "Could not find AED install"
-
 PWD_DIR=`pwd -P`
 AED_LOCAL_DIR="${PWD_DIR}/.aed"
 AED_LOCAL_MODULES="${AED_LOCAL_DIR}/modules"
-
+AED_LOG="${AED_LOCAL_DIR}/defib.log"
 AED_FILE="${PWD_DIR}/Aedfile"
-if [ ! -e "$AED_FILE" ]; then
-  outp "You must create a project specific '$AED_FILE' file"
-  exit 1
-fi
 
-
+mkdir -p ${AED_LOCAL_DIR}
+echo -n "" > ${AED_LOG}
 
 echo "                 ______  _____"
 echo "          /\    |  ____||  __ \\"
@@ -32,14 +27,23 @@ echo "          Automated External "
 echo "            Defibrillator "
 echo
 
+source "${AED_LIB}/utils.sh" || die "Could not find AED install"
+
+if [ ! -e "$AED_FILE" ]; then
+  outp "You must create a project specific '$AED_FILE' file"
+  exit 1
+fi
+
 debug "Sourcing core and platform from '${AED_LIB}'"
 source "${AED_LIB}/core.sh"
 source "${AED_LIB}/platform.sh"
 
 outp "Shocking project to life with '${PKG_MGR}' on '${PLATFORM}' ... CLEAR!!!"
+outp
 
-outp "Updating ${PKG_MGR}..."
-update_pkg_mgr || die "Cannot to update package manager"
+if [ -z "$SKIP_UPDATE" ]; then
+  defib_module "Updating ${PKG_MGR}..." 'update_pkg_mgr' || die "Cannot to update package manager"
+fi
 
 debug "loading ${AED_FILE}"
 source "${AED_FILE}"

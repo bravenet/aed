@@ -4,26 +4,41 @@ readonly MODULE_INSTALL_HOOK=module_install
 readonly MODULE_POST_INSTALL_HOOK=module_post_install
 readonly MODULE_PRE_INSTALL_HOOK=module_pre_install
 
+readonly OK=0
+readonly ERROR=1
+readonly SKIP=255
+
 defib() {
-  if ! defib_module $1; then
+  defib_module "Shocking $1..." "$1"
+  if [ "$?" -ne 0 -a "$?" -ne 255 ]; then
+    outp "Failed to install '$package'"
+    cat "$log_file"
     die
   fi
 }
 
 defib_module() {
+  local banner=$1
+  local package=$2
+
+  start_progress "$banner" &
+  local pid=$!
+
   (
-  if has_fun "$1"; then
-    if ! eval "$1"; then
-      die "Custom hook returned non-zero status"
+  if has_fun "$package"; then
+    debug "Running hook '$package'"
+    outp
+    if ! eval "$package"; then
+      die
     fi
+    outp
   else
-    if ! connect_module_leads "$1"; then
-      return $?
-    else
-      shock_package "$1"
-    fi
+    MODULE=$package
+    connect_module_leads "$package"
   fi
-  )
+  ) >>$AED_LOG 2>&1
+
+  stop_progress $pid $?
 }
 
 connect_module_leads() {
@@ -41,28 +56,13 @@ connect_module_leads() {
 try_load_module() {
   debug "Trying to load '$1'"
   if [ -e "$1" ]; then
+    debug "Running script '$1'..."
+    outp
     source "$1" || die "Corrupt package detail found in '$1'."
+    outp
+    return 0
   else
     return 1
-  fi
-}
-
-shock_package() {
-  outp "Installing $1..."
-
-  if run_hook user_pre_install_hook "$1"; then
-
-    if run_hook pkg_pre_install_hook "$1"; then
-      if run_hook pkg_install_hook "$1"; then
-        run_hook pkg_post_install_hook "$1"
-      else
-        die "Failed to install $1."
-      fi
-    else
-      outp "already installed, skipping."
-    fi
-
-    run_hook user_post_install_hook "$1"
   fi
 }
 
@@ -76,6 +76,24 @@ run_hook() {
     die "Module triggered abort"
   fi
   return $ret
+}
+
+pkg_mgr() {
+  local command=$1
+  shift
+  case $command in
+    'install')
+      pkg_mgr_install "$@"
+      ;;
+    'exists')
+      if pkg_mgr_check "$1"; then
+        exit $SKIP
+      fi
+      ;;
+    *)
+      die 'Unknown command'
+      ;;
+  esac
 }
 
 user_pre_install_hook() {

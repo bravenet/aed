@@ -1,13 +1,18 @@
-module_pre_install() {
-  debug "redis pre_install"
-  missing_cmd "redis-server"
-}
+# these two variables are package manager dependent
+$PACKAGE_EXEC='redis-server'
+$PACKAGE_NAME='redis'
 
-module_install() {
-  debug "redis install"
-  brew install redis
-}
+if [ has_cmd $PACKAGE_EXEC ]; then
+  exit $SKIP
+fi
 
-module_post_install() {
-  debug "redis post_install"
-}
+if [ has_cmd `$PKG_MGR --prefix`/bin/$PACKAGE_EXEC ]; then
+  # maybe repair the path
+  exit $ERROR
+fi
+
+if [ ! $PKG_MGR list $PACKAGE_NAME ]; then
+  $PKG_MGR install $PACKAGE_NAME
+else
+  $PKG_MGR link $PACKAGE_NAME
+fi

@@ -7,12 +7,12 @@ outp() {
 }
 
 debug() {
-  [ -n "$DEBUG" ] && __puts '>' "DBG: $@"
+  __puts '>' "DBG: $@" >> $AED_LOG
 }
 
 die() {
   echo
-  if [ -e "$1" ]; then
+  if [ -n "$1" ]; then
     __puts '>' "Fatal: $1"
   fi
 
@@ -20,6 +20,33 @@ die() {
     outp "Project has flatlined!"
   fi
   exit 1
+}
+
+start_progress() {
+  echo -n "> $1"
+  while true; do
+    echo -n "."
+    sleep 1
+  done
+}
+
+stop_progress() {
+  kill $1
+  wait $1 2> /dev/null
+
+  case "$2" in
+    0 )
+      echo -n "done"
+      ;;
+    255 )
+      echo -n "skipped"
+      ;;
+    * )
+      echo -n "aborted"
+      ;;
+  esac
+  echo
+  return $2
 }
 
 missing_cmd() {
