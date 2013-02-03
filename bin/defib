@@ -1,51 +1,10 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
+# vim: ft=tcl
+# AED - Automated External Defibrillator \
+exec tclsh "$0" "$@"
+set auto_path [linsert $auto_path 0 [file join [file dirname [info script]] .. lib]]
+puts $auto_path
 
-DEF_BASE="$HOME/.aed"
-AED_BASE="${AED_BASE:=$DEF_BASE}"
-AED_LIB="${AED_BASE}/lib"
-AED_MODULES="${AED_BASE}/modules"
-AED_CONFIG="${HOME}/.aedrc"
+package require aed 1.0
 
-PWD_DIR=`pwd -P`
-AED_LOCAL_DIR="${PWD_DIR}/.aed"
-AED_LOCAL_MODULES="${AED_LOCAL_DIR}/modules"
-AED_LOG="${AED_LOCAL_DIR}/defib.log"
-AED_FILE="${PWD_DIR}/Aedfile"
-
-mkdir -p ${AED_LOCAL_DIR}
-echo -n "" > ${AED_LOG}
-
-echo "                 ______  _____"
-echo "          /\    |  ____||  __ \\"
-echo "         /  \   | |__   | |  | |"
-echo "        / /\ \  |  __|  | |  | |"
-echo "       / ____ \ | |____ | |__| |"
-echo "      /_/    \_\|______||_____/"
-echo
-echo
-echo "          Automated External "
-echo "            Defibrillator "
-echo
-
-source "${AED_LIB}/utils.sh" || die "Could not find AED install"
-
-if [ ! -e "$AED_FILE" ]; then
-  outp "You must create a project specific '$AED_FILE' file"
-  exit 1
-fi
-
-debug "Sourcing core and platform from '${AED_LIB}'"
-source "${AED_LIB}/core.sh"
-source "${AED_LIB}/platform.sh"
-
-outp "Shocking project to life with '${PKG_MGR}' on '${PLATFORM}' ... CLEAR!!!"
-outp
-
-if [ -z "$SKIP_UPDATE" ]; then
-  defib_module "Updating ${PKG_MGR}..." 'update_pkg_mgr' || die "Cannot to update package manager"
-fi
-
-debug "loading ${AED_FILE}"
-source "${AED_FILE}"
-
-outp "It lives!!"
+aed::startup

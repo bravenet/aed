@@ -1,0 +1,5 @@
+# vim: ft=sh
+
+defib install erlang
+defib install collectd
+defib install mongodb
