@@ -4,7 +4,10 @@ AED - Shock your projects to life!
 Disclaimer
 ----------
 
-Prior to starting this project I had written zero lines of bash. If you see glaring mistakes with my bash, or recommendations for more succinct bash send a pull request.
+*This branch is not in a working state.*
+
+Prior to starting this project I had written zero lines of Tcl. If you see glaring mistakes with my Tcl, or recommendations for more succinct Tcl send a pull request.
+
 
 Installation
 ------------
@@ -27,9 +30,9 @@ A sample Aedfile will look like this
 
     $ cat Aedfile
     # vim: ft=sh
-    defib 'mongodb'
-    defib 'redis'
-    defib 'mysql'
+    defib install mongodb
+    defib install redis
+    defib install mysql
 
 With an Aedfile located in the root of your project you can breath life and bootstrap your project using the `defib` command.
 
